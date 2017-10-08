@@ -7,18 +7,6 @@ from time import sleep
 import serial
 from web_if import*
 from clocko import*
-cam_width = 352
-cam_height = 288
-y_tolerance = 50
-x_tolerance = 550
-
-MAX_FRAMES_FOR_MOVEMENT = 2000
-MAX_FRAMES_FOR_ROTATION = 1000
-
-low_x = cam_width/2 - x_tolerance
-high_x = cam_width/2 + x_tolerance
-low_y = cam_height/2 - y_tolerance
-high_y = cam_height/2 + y_tolerance
 
 # Basic setup
 cascPath = "haarcascade_frontalface_default.xml"
@@ -28,14 +16,36 @@ log.basicConfig(filename='geo.log',level=log.INFO)
 log.info("Starting video capture")
 print('Start vid capture')
 video_capture = None
-for cam_id in [0, 1, 2, 3, 4, 5]:
-    print('Checking cam_id '+str(cam_id))
-    video_capture = cv2.VideoCapture(cam_id)
-    if video_capture.isOpened():
+while True:
+    for cam_id in [0, 1, 2, 3, 4, 5]:
+        print('Checking cam_id '+str(cam_id))
+        video_capture = cv2.VideoCapture(cam_id)
+        if video_capture.isOpened():
+            break
+        else:
+            video_capture = None
+    if video_capture != None:
         break
+    print("Failed to connect to camera - retrying...")
+    time.sleep(5)
 anterior = 1
 from hw_if import*
 frames = 0
+
+cam_width = video_capture.get(3)
+cam_height = video_capture.get(4)
+cam_height = 288
+y_tolerance = 50
+x_tolerance = 200
+
+MAX_FRAMES_FOR_MOVEMENT = 2000
+MAX_FRAMES_FOR_ROTATION = 1000
+
+low_x = cam_width/2 - x_tolerance
+high_x = cam_width/2 + x_tolerance
+low_y = cam_height/2 - y_tolerance
+high_y = cam_height/2 + y_tolerance
+
 while True:
     if not video_capture.isOpened():
         log.info('Unable to load camera.')
@@ -53,7 +63,6 @@ while True:
         minNeighbors=5,
         minSize=(20, 20)#orig: 30x30
     )
-    print(faces)
 
     # Draw a rectangle around the faces
     for (x, y, w, h) in faces:
@@ -63,7 +72,6 @@ while True:
         height = h
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
         cv2.circle(frame, (center_x, center_y), 10, (0, 0, 255), 2)
-        print([center_x, center_y])
         frames = getTime()
         if center_x > low_x and center_x < high_x:
             moveForward() 
