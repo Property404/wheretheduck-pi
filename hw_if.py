@@ -15,7 +15,7 @@ _all_pins = [_forward, _backward, _right, _left, _stop]
 
 _current_pin = None
 
-TIME_DELAY = 8000
+TIME_DELAY = 500
 
 for pin in _all_pins:
     print(pin)
@@ -38,6 +38,7 @@ def _turnAllPinsOff():
 
 def _dothedo(pin):
     global _current_pin
+    global _last_stop
     if pin != _stop:
         if not hasStopped():
             stop()
@@ -48,6 +49,7 @@ def _dothedo(pin):
     _current_pin = pin
 
 def stop():
+    global _last_stop
     print(":stop")
     _last_stop = getTime()
     if not hasStopped():
@@ -88,4 +90,10 @@ def rotatingRight():
     return _current_pin == _right
 
 stop()
+if __name__ == "__main__":
+    moveForward()
+    rotateRight()
+    moveForward()
+    rotateRight()
+    stop()
 
