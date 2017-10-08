@@ -1,13 +1,13 @@
 import time
 import RPi.GPIO as GPIO
 from clocko import*
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 
-_forward = 11
-_backward = 8
-_right = 5
-_left = 10
-_stop = 7
+_forward = 5
+_backward = 6
+_right = 13
+_left = 19
+_stop = 26
 
 _last_stop = 0
 
@@ -15,7 +15,7 @@ _all_pins = [_forward, _backward, _right, _left, _stop]
 
 _current_pin = None
 
-TIME_DELAY = 200
+TIME_DELAY = 2000
 
 for pin in _all_pins:
     print(pin)
@@ -35,7 +35,6 @@ def _turnAllPinsOff():
     for pin in _all_pins:
         _turnPinOff(pin)
 
-_bytes = 2
 
 def _dothedo(pin):
     global _current_pin
