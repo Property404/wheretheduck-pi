@@ -28,7 +28,7 @@ while True:
     if video_capture != None:
         break
     print("Failed to connect to camera - retrying...")
-    time.sleep(5)
+    time.sleep(2)
 anterior = 1
 from hw_if import*
 frames = 0
@@ -75,7 +75,7 @@ while True:
         cv2.circle(frame, (center_x, center_y), 10, (0, 0, 255), 2)
         frames = getTime()
 
-        cv2.imwrite(FACE_FILENAME, (x, y, w, h))
+        cv2.imwrite(FACE_FILENAME, frame)
         if center_x > low_x and center_x < high_x:
             moveForward() 
             print("move_forward")

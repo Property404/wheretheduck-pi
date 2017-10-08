@@ -340,8 +340,8 @@ print("")
 
 #create our LBPH face recognizer
 def _createFaceRecognizer():
-	# return cv2.face.LBPHFaceRecognizer_create()
-	return cv2.face.createLBPHFaceRecognizer()
+	return cv2.face.LBPHFaceRecognizer_create()
+	#return cv2.face.createLBPHFaceRecognizer()
 face_recognizer = _createFaceRecognizer()
 
 #train our face recognizer of our training faces
