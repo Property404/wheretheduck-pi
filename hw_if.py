@@ -15,7 +15,7 @@ _all_pins = [_forward, _backward, _right, _left, _stop]
 
 _current_pin = None
 
-TIME_DELAY = 2000
+TIME_DELAY = 8000
 
 for pin in _all_pins:
     print(pin)
