@@ -7,6 +7,7 @@ from time import sleep
 import serial
 from web_if import*
 from clocko import*
+from facializer import isCorrectFace
 
 # Basic setup
 FACE_FILENAME = 'QuantumDagan.jpg'
@@ -75,7 +76,11 @@ while True:
         cv2.circle(frame, (center_x, center_y), 10, (0, 0, 255), 2)
         frames = getTime()
 
-        cv2.imwrite(FACE_FILENAME, frame)
+        print(len(faces))
+        cv2.imwrite(FACE_FILENAME, frame[y:y+h, x:x+w])
+        if(isCorrectFace(FACE_FILENAME)):
+            print('HOLY DUCKSHITS GUYS ITS DAGAN OUR BEST FRIEND/DADDY')
+
         if center_x > low_x and center_x < high_x:
             moveForward() 
             print("move_forward")
