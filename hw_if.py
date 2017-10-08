@@ -1,5 +1,6 @@
 import time
 import RPi.GPIO as GPIO
+from clocko import*
 GPIO.setmode(GPIO.BOARD)
 
 _forward = 11
@@ -7,6 +8,8 @@ _backward = 8
 _right = 5
 _left = 10
 _stop = 7
+
+_last_stop = 0
 
 _all_pins = [_forward, _backward, _right, _left, _stop]
 
@@ -34,11 +37,15 @@ _bytes = 2
 
 def _dothedo(pin):
     global _current_pin
+    if pin != _stop:
+        stop()
+    while ui[ 
     _turnAllPinsOff()
     _turnPinOn(pin)
     _current_pin = pin
 
 def stop():
+    _last_stop = getTime()
     if not hasStopped():
         _dothedo(_stop)
 
@@ -72,4 +79,6 @@ def rotatingLeft():
 
 def rotatingRight():
     return _current_pin == _right
+
+stop()
 

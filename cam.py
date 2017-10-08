@@ -6,10 +6,14 @@ import datetime as dt
 from time import sleep
 import serial
 from web_if import*
+from clocko import*
 cam_width = 352
 cam_height = 288
 y_tolerance = 50
 x_tolerance = 550
+
+MAX_FRAMES_FOR_MOVEMENT = 2000
+MAX_FRAMES_FOR_ROTATION = 1000
 
 low_x = cam_width/2 - x_tolerance
 high_x = cam_width/2 + x_tolerance
@@ -31,6 +35,7 @@ for cam_id in [0, 1, 2, 3, 4, 5]:
         break
 anterior = 1
 from hw_if import*
+frames = 0
 while True:
     if not video_capture.isOpened():
         log.info('Unable to load camera.')
@@ -59,6 +64,7 @@ while True:
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
         cv2.circle(frame, (center_x, center_y), 10, (0, 0, 255), 2)
         print([center_x, center_y])
+        frames = getTime()
         if center_x > low_x and center_x < high_x:
             moveForward() 
             print("move_forward")
@@ -71,8 +77,16 @@ while True:
 
         if anterior != len(faces):
                 anterior = len(faces)
-    if len(faces) == 0:
-        stop()
+    if movingForward():
+        frames += 1
+        if len(faces) == 0:
+            if getTime() - frames > MAX_FRAMES_FOR_MOVEMENT:
+                stop()
+    if rotatingLeft() or rotatingRight():
+        frames += 1
+        if len(faces) == 0:
+            if getTime() - frames > MAX_FRAMES_FOR_ROTATION:
+                stop()
 
 
     # Display the resulting frame
