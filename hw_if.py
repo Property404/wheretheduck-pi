@@ -15,6 +15,8 @@ _all_pins = [_forward, _backward, _right, _left, _stop]
 
 _current_pin = None
 
+TIME_DELAY = 200
+
 for pin in _all_pins:
     print(pin)
     GPIO.setup(pin, GPIO.OUT)
@@ -38,18 +40,22 @@ _bytes = 2
 def _dothedo(pin):
     global _current_pin
     if pin != _stop:
-        stop()
-    while ui[ 
+        if not hasStopped():
+            stop()
+        while getTime() - _last_stop < TIME_DELAY:
+            pass
     _turnAllPinsOff()
     _turnPinOn(pin)
     _current_pin = pin
 
 def stop():
+    print(":stop")
     _last_stop = getTime()
     if not hasStopped():
         _dothedo(_stop)
 
 def moveForward():
+    print(":movf")
     if not movingForward():
         _dothedo(_forward)
 
@@ -58,10 +64,12 @@ def moveBackward():
         _dothedo(_backward)
 
 def rotateLeft():
+    print(":rotl")
     if not rotatingLeft():
         _dothedo(_left)
 
 def rotateRight():
+    print(":rotr")
     if not rotatingRight():
         _dothedo(_right)
 
