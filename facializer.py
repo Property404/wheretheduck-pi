@@ -339,7 +339,10 @@ print("Total labels: "+ str(len(labels)))
 print("")
 
 #create our LBPH face recognizer
-face_recognizer = cv2.face.LBPHFaceRecognizer_create()
+def _createFaceRecognizer():
+	# return cv2.face.LBPHFaceRecognizer_create()
+	return cv2.face.createLBPHFaceRecognizer()
+face_recognizer = _createFaceRecognizer()
 
 #train our face recognizer of our training faces
 face_recognizer.train(faces, np.array(labels))
@@ -347,6 +350,12 @@ face_recognizer.train(faces, np.array(labels))
 #test with separate pictures known correct
 confidence_threshold = validate(validation_location)
 
+
+def isCorrectFace(capture):
+	return main(capture, confidence_threshold)
+
+# Use like so: from facializer import isCorrectFace
+"""
 while True:
     time.sleep(5)
     if len(os.listdir(test_location)) != 1:
@@ -358,3 +367,4 @@ while True:
         os.remove(capture)
     else:
         pass
+"""
