@@ -9,6 +9,7 @@ from web_if import*
 from clocko import*
 
 # Basic setup
+FACE_FILENAME = 'QuantumDagan.jpg'
 cascPath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
 log.basicConfig(filename='geo.log',level=log.INFO)
@@ -73,6 +74,8 @@ while True:
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
         cv2.circle(frame, (center_x, center_y), 10, (0, 0, 255), 2)
         frames = getTime()
+
+        cv2.imwrite(FACE_FILENAME, (x, y, w, h))
         if center_x > low_x and center_x < high_x:
             moveForward() 
             print("move_forward")
@@ -82,6 +85,7 @@ while True:
         else:
             rotateLeft()
             print("rot_left")
+
 
         if anterior != len(faces):
                 anterior = len(faces)
