@@ -6,7 +6,7 @@ GPIO.setmode(GPIO.BCM)
 _forward = 5
 _backward = 6
 _right = 13
-_left = 16#19
+_left = 19
 _stop = 26
 
 _last_stop = 0
